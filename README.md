@@ -1,21 +1,20 @@
-### Control de versiones del laboratorio de computación gráfica e interacción humano-computadora
+# Control de versiones  
+## Laboratorio de Computación Gráfica e Interacción Humano–Computadora
 
-## UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO
+---
 
-## FACULTAD DE INGENIERÍA
+### Universidad Nacional Autónoma de México  
+**Facultad de Ingeniería**  
+**División de Ingeniería Eléctrica**  
+**Ingeniería en Computación**
 
-## DIVISIÓN DE INGENIERÍA ELÉCTRICA
+---
 
-## INGENIERÍA EN COMPUTACIÓN
+## Información del estudiante
+- **Nombre:** Velasco Pacheco Javier
+- **Número de cuenta:** 423035119  
+- **Grupo de laboratorio:** 03  
+- **Grupo de teoría:** 05  
+- **Semestre:** 2025-2
 
-## LABORATORIO DE COMPUTACIÓN GRÁFICA E INTERACCIÓN HUMANO COMPUTADORA
-
-NOMBRE COMPLETO: Gutierrez Preza Diego
-
-Nº de Cuenta: 319156715
-
-GRUPO DE LABORATORIO: 03
-
-GRUPO DE TEORÍA: 05
-
-SEMESTRE 2025-2
+---

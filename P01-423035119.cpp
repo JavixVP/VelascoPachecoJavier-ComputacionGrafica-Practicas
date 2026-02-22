@@ -1,0 +1,310 @@
+﻿#include <stdio.h>
+#include <string.h>
+#include <glew.h>
+#include <glfw3.h>
+#include <windows.h>
+#include <cstdlib>
+#include <ctime>
+
+//Dimensiones de la ventana
+const int WIDTH = 800, HEIGHT = 600;
+GLuint VAO, VBO, shader;
+
+//Vertex Shader
+//recibir color, salida Vcolor
+static const char* vShader = "						\n\
+#version 330										\n\
+layout (location =0) in vec3 pos;					\n\
+void main()											\n\
+{													\n\
+gl_Position=vec4(pos.x,pos.y,pos.z,1.0f); 			\n\
+}";
+
+//Fragment Shader
+//recibir Vcolor y dar de salida color
+static const char* fShader = "						\n\
+#version 330										\n\
+out vec4 color;										\n\
+void main()											\n\
+{													\n\
+	color = vec4(1.0f,1.0f,1.0f,1.0f);	 			\n\
+}";
+
+void CrearTriangulo()
+{
+	GLfloat vertices[] = {
+		//figura1
+		-0.9f,-0.4f,0.0f,
+		-0.4f,-0.4f, 0.0f,
+		-0.9f,-0.5f,0.0f,
+		//figura2
+		-0.9f,-0.5f,0.0f,
+		-0.4f,-0.4f,0.0f,
+		-0.4f,-0.5f,0.0f,
+
+		//figura3
+		-0.7f,-0.5f,0.0f,
+		-0.55f,-0.5f,0.0f,
+		-0.55f,-0.9f,0.0f,
+
+		//figura4
+		-0.7f,-0.5f,0.0f,
+		-0.7f,-0.9f,0.0f,
+		-0.55f,-0.9f,0.0f,
+
+		//figura5		
+		-0.7f,-0.8f,0.0f,
+		-0.7f,-0.9f,0.0f,
+		-0.9f,-0.8f,0.0f,
+
+		//figura6		
+		-0.9f,-0.8f,0.0f,
+		-0.7f,-0.9f,0.0f,
+		-0.9f,-0.8f,0.0f,
+
+		//figura7		
+		-0.9f,-0.7f,0.0f,
+		-0.8f,-0.7f,0.0f,
+		-0.9f,-0.8f,0.0f,
+
+		//figura8		
+		-0.8f,-0.8f,0.0f,
+		-0.8f,-0.7f,0.0f,
+		-0.9f,-0.8f,0.0f,
+
+		//figura9		
+		-0.9f,-0.9f,0.0f,
+		-0.7f,-0.9f,0.0f,
+		-0.9f,-0.8f,0.0f,
+
+		//figura10	
+		-0.25f,0.3f,0.0f,
+		-0.1f,0.3f,0.0f,
+		-0.1f,-0.2f,0.0f,
+
+		//figura11	
+		0.0f,0.0f,0.0f,
+		-0.1f,0.3f,0.0f,
+		-0.1f,-0.2f,0.0f,
+
+		//figura12	
+		0.0f,0.0f,0.0f,
+		0.1f,-0.2f,0.0f,
+		-0.1f,-0.2f,0.0f,
+
+		//figura13	
+		0.0f,0.0f,0.0f,
+		0.1f,0.3f,0.0f,
+		0.1f,-0.2f,0.0f,
+
+		//figura14	
+		0.25f,0.3f,0.0f,
+		0.1f,0.3f,0.0f,
+		0.1f,-0.2f,0.0f,
+
+		//figura15	
+		0.45f,0.9f,0.0f,
+		0.45f,0.4f,0.0f,
+		0.6f,0.4f,0.0f,
+
+		//figura16	
+		0.45f,0.9f,0.0f,
+		0.6f,0.9f,0.0f,
+		0.6f,0.4f,0.0f,
+
+		//figura17	
+		0.8f,0.9f,0.0f,
+		0.6f,0.9f,0.0f,
+		0.6f,0.8f,0.0f,
+
+		//figura18
+		0.8f,0.9f,0.0f,
+		0.9f,0.8f,0.0f,
+		0.6f,0.8f,0.0f,
+
+		//figura19
+		0.8f,0.8f,0.0f,
+		0.9f,0.8f,0.0f,
+		0.8f,0.7f,0.0f,
+
+		//figura20
+		0.9f,0.8f,0.0f,
+		0.9f,0.7f,0.0f,
+		0.8f,0.7f,0.0f,
+
+		//figura21
+		0.6f,0.7f,0.0f,
+		0.6f,0.6f,0.0f,
+		0.9f,0.7f,0.0f,
+
+		//figura22
+		0.8f,0.6f,0.0f,
+		0.6f,0.6f,0.0f,
+		0.9f,0.7f,0.0f,
+	};
+
+	glGenVertexArrays(1, &VAO); //generar 1 VAO
+	glBindVertexArray(VAO);//asignar VAO
+
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); //pasarle los datos al VBO asignando tamano, los datos y en este caso es estático pues no se modificaran los valores
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (GLvoid*)0);//Stride en caso de haber datos de color por ejemplo, es saltar cierta cantidad de datos
+	glEnableVertexAttribArray(0);
+
+	//agregar valores a vertices y luego declarar un nuevo vertexAttribPointer
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+}
+
+void AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
+
+// Función para agregar los shaders a la tarjeta grafica
+//the Program recibe los datos de theShader
+
+{
+	GLuint theShader = glCreateShader(shaderType);//theShader es un shader que se crea de acuerdo al tipo de shader: vertex o fragment
+	const GLchar* theCode[1];
+	theCode[0] = shaderCode;//shaderCode es el texto que se le pasa a theCode
+	GLint codeLength[1];
+	codeLength[0] = strlen(shaderCode);//longitud del texto
+	glShaderSource(theShader, 1, theCode, codeLength);//Se le asigna al shader el c�digo
+	glCompileShader(theShader);//Se comila el shader
+	GLint result = 0;
+	GLchar eLog[1024] = { 0 };
+	//verificaciones y prevenci�n de errores
+	glGetShaderiv(theShader, GL_COMPILE_STATUS, &result);
+	if (!result)
+	{
+		glGetProgramInfoLog(shader, sizeof(eLog), NULL, eLog);
+		printf("EL error al compilar el shader %d es: %s \n", shaderType, eLog);
+		return;
+	}
+	glAttachShader(theProgram, theShader);//Si no hubo problemas se asigna el shader a theProgram el cual asigna el c�digo a la tarjeta gr�fica
+
+}
+
+void CompileShaders() //Se compila el shader
+{
+	shader = glCreateProgram(); //se crea un programa
+	if (!shader)
+	{
+		printf("Error creando el shader");
+		return;
+	}
+	AddShader(shader, vShader, GL_VERTEX_SHADER);//Agregar vertex shader
+	AddShader(shader, fShader, GL_FRAGMENT_SHADER);//Agregar fragment shader
+	//Para terminar de linkear el programa y ver que no tengamos errores
+	GLint result = 0;
+	GLchar eLog[1024] = { 0 };
+	glLinkProgram(shader);//se linkean los shaders a la tarjeta gr�fica
+	//verificaciones y prevenci�n de errores
+	glGetProgramiv(shader, GL_LINK_STATUS, &result);
+	if (!result)
+	{
+		glGetProgramInfoLog(shader, sizeof(eLog), NULL, eLog);
+		printf("EL error al linkear es: %s \n", eLog);
+		return;
+	}
+	glValidateProgram(shader);
+	glGetProgramiv(shader, GL_VALIDATE_STATUS, &result);
+	if (!result)
+	{
+		glGetProgramInfoLog(shader, sizeof(eLog), NULL, eLog);
+		printf("EL error al validar es: %s \n", eLog);
+		return;
+	}
+}
+
+// Función que genera un valor de color aleatorio en el rango 0.0 a 1.0
+float coloraleatorio() {
+	float randColor = static_cast<float>(rand()) / RAND_MAX;
+	printf("%.2f ", randColor);
+	return randColor;
+}
+
+int main()
+{
+	// Inicializa la semilla del generador de números aleatorios usando el tiempo actual.
+	// Esto garantiza que cada vez que se ejecute el programa, el orden de los colores
+	// será diferente y no siempre el mismo.
+	srand((unsigned int)time(NULL));
+
+	//Inicialización de GLFW
+	if (!glfwInit())
+	{
+		printf("Falló inicializar GLFW");
+		glfwTerminate();
+		return 1;
+	}
+
+	//Asignando variables de GLFW y propiedades de ventana
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	//para solo usar el core profile de OpenGL y no tener retrocompatibilidad
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+	//CREAR VENTANA
+	GLFWwindow* mainWindow = glfwCreateWindow(WIDTH, HEIGHT, "Practica01:Introduccion a OpenGL", NULL, NULL);
+
+	if (!mainWindow)
+	{
+		printf("Fallo en crearse la ventana con GLFW");
+		glfwTerminate();
+		return 1;
+	}
+
+	//Obtener tamano de Buffer
+	int BufferWidth, BufferHeight;
+	glfwGetFramebufferSize(mainWindow, &BufferWidth, &BufferHeight);
+	//asignar el contexto
+	glfwMakeContextCurrent(mainWindow);
+
+	glewExperimental = GL_TRUE;
+	glewInit();
+
+	if (glewInit() != GLEW_OK)
+	{
+		printf("Fallo inicializacion de GLEW");
+		glfwDestroyWindow(mainWindow);
+		glfwTerminate();
+		return 1;
+	}
+
+	glViewport(0, 0, BufferWidth, BufferHeight);
+
+	CrearTriangulo();
+	CompileShaders();
+
+	int cont = 1;
+	while (!glfwWindowShouldClose(mainWindow))
+	{
+		glfwPollEvents();
+
+		printf("Fondo %i :", cont);
+
+		// Asigna un color de fondo aleatorio usando valores RGB
+		 // Cada canal (R, G, B) se genera de forma independiente
+		glClearColor(coloraleatorio(), coloraleatorio(), coloraleatorio(), 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		printf("\n", cont);
+		cont++;
+
+		glUseProgram(shader);
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 66);
+		glBindVertexArray(0);
+		glUseProgram(0);
+
+		glfwSwapBuffers(mainWindow);
+
+		// Pausa la ejecución durante 2000 milisegundos (2 segundos)
+		// Esto define la periodicidad del cambio de color del fondo
+		Sleep(2000);
+	}
+
+	return 0;
+
+}

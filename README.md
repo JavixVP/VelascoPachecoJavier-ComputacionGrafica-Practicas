@@ -15,6 +15,6 @@
 - **Número de cuenta:** 423035119  
 - **Grupo de laboratorio:** 03  
 - **Grupo de teoría:** 05  
-- **Semestre:** 2025-2
+- **Semestre:** 2026-2
 
 ---

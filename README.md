@@ -6,7 +6,7 @@
 ### Universidad Nacional Autónoma de México  
 **Facultad de Ingeniería**  
 **División de Ingeniería Eléctrica**  
-**Ingeniería en Computación**
+**Ingeniería en Computación **
 
 ---
 
